@@ -86,9 +86,10 @@ class EarlyStopping:
         torch.save(model.state_dict(), self.path)
         self.val_loss_min = val_loss
 #----------------------alexnet----------------------
-BEST_MODEL_PATH = r"..\model\alex.pth"
-model = models.alexnet(pretrained=True)
-model.classifier[6] = torch.nn.Linear(model.classifier[6].in_features, 3)
+BEST_MODEL_PATH = r"..\model\res152.pth"
+model = models.resnet152(pretrained=True)
+fc_inputs = model.fc.in_features
+model.fc = torch.nn.Linear(fc_inputs, 3)
 for param in model.parameters():
     param.require_grad = False
 print(model)
@@ -100,10 +101,10 @@ for name, p in model.named_parameters():
     else:
         weight_p += [p]
 
-classifier_layers_params = list(map(id, model.classifier.parameters()))
-base_params = filter(lambda p:id(p) not in classifier_layers_params, model.parameters())
-# fc_layers_params = list(map(id, model.fc.parameters()))
-# base_params = filter(lambda p:id(p) not in fc_layers_params, model.parameters())
+# classifier_layers_params = list(map(id, model.classifier.parameters()))
+# base_params = filter(lambda p:id(p) not in classifier_layers_params, model.parameters())
+fc_layers_params = list(map(id, model.fc.parameters()))
+base_params = filter(lambda p:id(p) not in fc_layers_params, model.parameters())
 
 if __name__ == '__main__':
     run()
@@ -131,8 +132,8 @@ if __name__ == '__main__':
         ]))
     print(len(test_dataset))
     
-    train_loader = DataLoader(train_dataset, batch_size=24, shuffle=True, num_workers=0)
-    test_loader = DataLoader(test_dataset, batch_size=24, shuffle=True, num_workers=0)
+    train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=0)
+    test_loader = DataLoader(test_dataset, batch_size=16, shuffle=True, num_workers=0)
 
     #img, label = train_loader.__iter__().__next__()
     #print(label)
