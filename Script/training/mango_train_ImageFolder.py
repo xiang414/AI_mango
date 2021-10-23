@@ -86,9 +86,20 @@ class EarlyStopping:
         torch.save(model.state_dict(), self.path)
         self.val_loss_min = val_loss
 #----------------------alexnet----------------------
-BEST_MODEL_PATH = r"..\model\vgg16.pth"
+BEST_MODEL_PATH = r"..\model\vgg16_change_fc.pth"
 model = models.vgg16(pretrained=True)
-model.classifier[6] = torch.nn.Linear(model.classifier[6].in_features, 3)
+classifier = nn.Sequential(OrderedDict([
+                            ('fc1',nn.Linear(25088,4096)),
+                            ('dropout1',nn.Dropout(0.3)),
+                            ('relu1',nn.ReLU()),
+                            ('fc2',nn.Linear(4096,1000)),
+                            ('dropout2',nn.Dropout(0.3)),
+                            ('relu2',nn.ReLU()),
+                            ('fc3',nn.Linear(1000,500)),
+                            ('relu3', nn.ReLU()),
+                            ('fc4', nn.Linear(500, 3))
+                           ]))
+model.classifier = classifier
 for param in model.parameters():
     param.require_grad = False
 print(model)
