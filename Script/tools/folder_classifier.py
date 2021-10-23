@@ -22,7 +22,7 @@ class ReadCSV:
             self.label.append(self.all_list[i])
         return self.label
 
-path = 'D:\\AI_Mango\\data\\C1-P1_Train'
+path = r"..\..\dataset\all_train"
 img_root = path+'\\'
 
 if isdir(img_root+'A'):
@@ -32,7 +32,7 @@ else:
     os.mkdir(img_root+'B')
     os.mkdir(img_root+'C')
     
-test_csv = ReadCSV('D:\\AI_Mango\\data\\C1-P1_Train.csv')
+test_csv = ReadCSV(r"..\..\dataset\all_train.csv")
 test_label = test_csv.read()
 
 img = listdir(path)
