@@ -4,7 +4,7 @@ from PIL import Image
 from PIL import ImageEnhance
  
 #原始圖像
-image = Image.open('D:\\AI_Mango\\data\\Costom Data\\train\\00456.jpg')
+image = Image.open(r"..\..\dataset\Custom Data\train\00456.jpg")
 image = image.resize((264, 264), Image.ANTIALIAS)
 #image.show()
 image = image.crop([20,20,244,244])
