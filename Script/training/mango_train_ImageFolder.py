@@ -86,9 +86,17 @@ class EarlyStopping:
         torch.save(model.state_dict(), self.path)
         self.val_loss_min = val_loss
 #----------------------alexnet----------------------
-BEST_MODEL_PATH = r"..\model\res50.pth"
+BEST_MODEL_PATH = r"..\model\res50_change_fc.pth"
 model = models.resnet50(pretrained=True)
-model.fc = torch.nn.Linear(2048, 3)
+fc_inputs = model.fc.in_features
+model.fc = nn.Sequential(
+                         nn.Linear(fc_inputs, 1024),
+                         nn.ReLU(),
+                         nn.Dropout(0.5),
+                         nn.Linear(1024, 256),
+                         nn.ReLU(),
+                         nn.Dropout(0.5),
+                         nn.Linear(256, 3))
 for param in model.parameters():
     param.require_grad = False
 print(model)
