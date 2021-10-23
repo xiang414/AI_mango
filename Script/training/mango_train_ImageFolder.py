@@ -86,8 +86,8 @@ class EarlyStopping:
         torch.save(model.state_dict(), self.path)
         self.val_loss_min = val_loss
 #----------------------alexnet----------------------
-BEST_MODEL_PATH = r"..\model\alex.pth"
-model = models.alexnet(pretrained=True)
+BEST_MODEL_PATH = r"..\model\vgg16.pth"
+model = models.vgg16(pretrained=True)
 model.classifier[6] = torch.nn.Linear(model.classifier[6].in_features, 3)
 for param in model.parameters():
     param.require_grad = False
